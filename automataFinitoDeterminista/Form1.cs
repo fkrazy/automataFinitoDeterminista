@@ -109,7 +109,7 @@ namespace automataFinitoDeterminista
         }
         #endregion
 
-        int[] posicionActual = new int[2];
+        Point posicionActual = new Point();
         Bitmap DrawArea;
         Dictionary<string, bool> estadosGraficos;
         Dictionary<Point, string> posicionesGraficas;
@@ -134,7 +134,7 @@ namespace automataFinitoDeterminista
         {
             int x = e.X / 100;
             int y = e.Y / 100;
-            if (!(posicionActual[0] == x && posicionActual[1] == y))
+            if (!(posicionActual.X == x && posicionActual.Y == y))
             {
                 crearCirculo(e);
             }
@@ -147,22 +147,61 @@ namespace automataFinitoDeterminista
             g = Graphics.FromImage(imagen);
             Pen mypen = new Pen(Brushes.Black);
             Pen eraser = new Pen(Brushes.White);
-            int[] posicionAnterior = (int[])posicionActual.Clone();
-            posicionActual[0] = e.X / 100;
-            posicionActual[1] = e.Y / 100;
-            if (!posicionesGraficas.ContainsKey(new Point(posicionAnterior[0], posicionAnterior[1])))
-                g.DrawEllipse(eraser, posicionAnterior[0] * 100, posicionAnterior[1] * 100, 50, 50);
-            if (!posicionesGraficas.ContainsKey(new Point(posicionActual[0], posicionActual[1])))
-                g.DrawEllipse(mypen, posicionActual[0] * 100, posicionActual[1] * 100, 50, 50);
+            Point posicionAnterior = posicionActual;
+            posicionActual.X = e.X / 100;
+            posicionActual.Y = e.Y / 100;
+            if (!posicionesGraficas.ContainsKey(posicionAnterior))
+                g.DrawEllipse(eraser, posicionAnterior.X * 100, posicionAnterior.Y * 100, 50, 50);
+            if (!posicionesGraficas.ContainsKey(new Point(posicionActual.X, posicionActual.Y)))
+                g.DrawEllipse(mypen, posicionActual.X * 100, posicionActual.Y * 100, 50, 50);
             tablero.Image = imagen;
             g.Dispose();
         }
 
         private void tablero_Click(object sender, EventArgs e)
         {
+            if (!posicionesGraficas.ContainsKey(posicionActual))
+            {
+                ingresarEstado();
+            }
+        }
+
+        private void ingresarEstado()
+        {
             string estadoCreado = "q" + estadoSiguienteAgraficar.ToString();
             estadosGraficos.Add(estadoCreado, false);
-            posicionesGraficas.Add(new Point(posicionActual[0], posicionActual[1]), estadoCreado);
+            posicionesGraficas.Add(posicionActual, estadoCreado);
+            estadoSiguienteAgraficar++;
+            Graphics g;
+            Bitmap imagen = (Bitmap)tablero.Image.Clone();
+            g = Graphics.FromImage(imagen);
+            g.DrawString(estadoCreado, new Font("Verdana", 15), Brushes.Black, posicionActual.X * 100 + 7, posicionActual.Y * 100 + 10);
+            tablero.Image = imagen;
+            g.Dispose();
+        }
+
+        private void tablero_DoubleClick(object sender, EventArgs e)
+        {
+            Graphics g;
+            Bitmap imagen = (Bitmap)tablero.Image.Clone();
+            g = Graphics.FromImage(imagen);
+            if (posicionesGraficas.ContainsKey(posicionActual))
+            {
+                if (!estadosGraficos[posicionesGraficas[posicionActual]])
+                {
+                    Pen mypen = new Pen(Brushes.Black);
+                    g.DrawEllipse(mypen, posicionActual.X * 100 + 5, posicionActual.Y * 100 + 5, 40, 40);
+                    estadosGraficos[posicionesGraficas[posicionActual]] = true; 
+                }
+                else
+                {
+                    Pen mypen = new Pen(Brushes.White);
+                    g.DrawEllipse(mypen, posicionActual.X * 100 + 5, posicionActual.Y * 100 + 5, 40, 40);
+                    estadosGraficos[posicionesGraficas[posicionActual]] = false;
+                }
+            }            
+            tablero.Image = imagen;
+            g.Dispose();
         }
     }
 }

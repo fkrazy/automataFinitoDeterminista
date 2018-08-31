@@ -273,6 +273,7 @@
             this.tablero.TabIndex = 4;
             this.tablero.TabStop = false;
             this.tablero.Click += new System.EventHandler(this.tablero_Click);
+            this.tablero.DoubleClick += new System.EventHandler(this.tablero_DoubleClick);
             this.tablero.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
             // toolStrip1
