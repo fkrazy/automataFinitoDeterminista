@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -191,7 +192,7 @@ namespace automataFinitoDeterminista
                 {
                     Pen mypen = new Pen(Brushes.Black);
                     g.DrawEllipse(mypen, posicionActual.X * 100 + 5, posicionActual.Y * 100 + 5, 40, 40);
-                    estadosGraficos[posicionesGraficas[posicionActual]] = true; 
+                    estadosGraficos[posicionesGraficas[posicionActual]] = true;
                 }
                 else
                 {
@@ -199,7 +200,70 @@ namespace automataFinitoDeterminista
                     g.DrawEllipse(mypen, posicionActual.X * 100 + 5, posicionActual.Y * 100 + 5, 40, 40);
                     estadosGraficos[posicionesGraficas[posicionActual]] = false;
                 }
-            }            
+            }
+            tablero.Image = imagen;
+            g.Dispose();
+        }
+
+
+        private Point posicionInicialLinea = new Point();
+        private bool hacerLinea = false;
+        private void tablero_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (posicionesGraficas.ContainsKey(posicionActual) && e.Button == MouseButtons.Right)
+            {
+                posicionInicialLinea = posicionActual;
+                hacerLinea = true;
+            }
+        }
+
+        private void tablero_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (hacerLinea && e.Button == MouseButtons.Right)
+            {
+                ingresarAlfabeto ingreso = new ingresarAlfabeto(Alfabeto);
+                if (ingreso.ShowDialog() == DialogResult.OK)
+                {
+
+                    dibujarLinea();
+                }
+            }
+        }
+
+        private void dibujarLinea()
+        {
+            Graphics g;
+            Bitmap imagen = (Bitmap)tablero.Image.Clone();
+            g = Graphics.FromImage(imagen);
+            Pen pen = new Pen(Color.Black, 3);
+            pen.StartCap = LineCap.RoundAnchor;
+            pen.EndCap = LineCap.ArrowAnchor;
+            Point aumentoInicio = new Point(0, 25);
+            Point aumentoFinal = new Point(50, 25);
+            if (posicionInicialLinea.X < posicionActual.X)
+            {
+                aumentoInicio.X = 50;
+                aumentoFinal.X = 0;
+            }
+            else if (posicionInicialLinea.X == posicionActual.X)
+            {
+                aumentoInicio.X = 25;
+                aumentoFinal.X = 25;
+                if (posicionInicialLinea.Y < posicionActual.Y)
+                {
+                    aumentoInicio.Y = 50;
+                    aumentoFinal.Y = 0;
+                }
+                else
+                {
+                    aumentoInicio.Y = 0;
+                    aumentoFinal.Y = 50;
+                }
+            }
+            g.DrawLine(pen, posicionInicialLinea.X * 100 + aumentoInicio.X,
+                            posicionInicialLinea.Y * 100 + aumentoInicio.Y,
+                            posicionActual.X * 100 + aumentoFinal.X,
+                            posicionActual.Y * 100 + aumentoFinal.Y);
             tablero.Image = imagen;
             g.Dispose();
         }
