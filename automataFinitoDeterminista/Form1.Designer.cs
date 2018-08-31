@@ -48,13 +48,17 @@
             this.tableControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
-            this.alfabetoGrafico = new System.Windows.Forms.TextBox();
-            this.estadoInicialGrafico = new System.Windows.Forms.PictureBox();
+            this.tablero = new System.Windows.Forms.PictureBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
             this.tableControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.estadoInicialGrafico)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tablero)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -250,9 +254,8 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.label8);
-            this.tabPage2.Controls.Add(this.alfabetoGrafico);
-            this.tabPage2.Controls.Add(this.estadoInicialGrafico);
+            this.tabPage2.Controls.Add(this.tablero);
+            this.tabPage2.Controls.Add(this.toolStrip1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -260,35 +263,52 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Grafico";
             this.tabPage2.UseVisualStyleBackColor = true;
-            this.tabPage2.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tabPage2_MouseUp);
             // 
-            // label8
+            // tablero
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 9);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(49, 13);
-            this.label8.TabIndex = 2;
-            this.label8.Text = "Alfabeto:";
+            this.tablero.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tablero.Location = new System.Drawing.Point(3, 28);
+            this.tablero.Name = "tablero";
+            this.tablero.Size = new System.Drawing.Size(1218, 470);
+            this.tablero.TabIndex = 4;
+            this.tablero.TabStop = false;
+            this.tablero.Click += new System.EventHandler(this.tablero_Click);
+            this.tablero.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
-            // alfabetoGrafico
+            // toolStrip1
             // 
-            this.alfabetoGrafico.Location = new System.Drawing.Point(62, 6);
-            this.alfabetoGrafico.Name = "alfabetoGrafico";
-            this.alfabetoGrafico.Size = new System.Drawing.Size(319, 20);
-            this.alfabetoGrafico.TabIndex = 1;
-            this.alfabetoGrafico.TextChanged += new System.EventHandler(this.alfabetoGrafico_TextChanged);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
+            this.toolStripTextBox1,
+            this.toolStripLabel2,
+            this.toolStripTextBox2});
+            this.toolStrip1.Location = new System.Drawing.Point(3, 3);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1218, 25);
+            this.toolStrip1.TabIndex = 3;
+            this.toolStrip1.Text = "toolStrip1";
             // 
-            // estadoInicialGrafico
+            // toolStripLabel1
             // 
-            this.estadoInicialGrafico.Location = new System.Drawing.Point(11, 215);
-            this.estadoInicialGrafico.Name = "estadoInicialGrafico";
-            this.estadoInicialGrafico.Size = new System.Drawing.Size(56, 56);
-            this.estadoInicialGrafico.TabIndex = 0;
-            this.estadoInicialGrafico.TabStop = false;
-            this.estadoInicialGrafico.DoubleClick += new System.EventHandler(this.estadoInicialGrafico_DoubleClick);
-            this.estadoInicialGrafico.MouseDown += new System.Windows.Forms.MouseEventHandler(this.estadoInicialGrafico_MouseDown);
-            this.estadoInicialGrafico.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tabPage2_MouseUp);
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(52, 22);
+            this.toolStripLabel1.Text = "Alfabeto";
+            // 
+            // toolStripTextBox1
+            // 
+            this.toolStripTextBox1.Name = "toolStripTextBox1";
+            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(46, 22);
+            this.toolStripLabel2.Text = "palabra";
+            // 
+            // toolStripTextBox2
+            // 
+            this.toolStripTextBox2.Name = "toolStripTextBox2";
+            this.toolStripTextBox2.Size = new System.Drawing.Size(100, 25);
             // 
             // Form1
             // 
@@ -304,7 +324,9 @@
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.estadoInicialGrafico)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tablero)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -331,9 +353,12 @@
         private System.Windows.Forms.TabControl tableControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.PictureBox estadoInicialGrafico;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox alfabetoGrafico;
+        private System.Windows.Forms.PictureBox tablero;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
     }
 }
 
