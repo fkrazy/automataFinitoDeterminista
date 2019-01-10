@@ -16,7 +16,7 @@ namespace automataFinitoDeterminista
 
 
         #region METODO MANUAL
-        List<char> Alfabeto;
+        List<char> Alfabeto = new List<char>();
         Dictionary<char, bool> Estados;
 
         struct PreTrancisionTipo
@@ -114,6 +114,12 @@ namespace automataFinitoDeterminista
         Bitmap DrawArea;
         Dictionary<string, bool> estadosGraficos;
         Dictionary<Point, string> posicionesGraficas;
+        struct PreEstadoGrafico
+        {
+            public string estadoInicio;
+            public char letra;
+        }
+        Dictionary<PreEstadoGrafico, string> TransicionGrafica = new Dictionary<PreEstadoGrafico, string>();
         int estadoSiguienteAgraficar = 0;
         public Form1()
         {
@@ -161,10 +167,8 @@ namespace automataFinitoDeterminista
 
         private void tablero_Click(object sender, EventArgs e)
         {
-            if (!posicionesGraficas.ContainsKey(posicionActual))
-            {
+            if (!posicionesGraficas.ContainsKey(posicionActual) && !ponerEtiqueta)
                 ingresarEstado();
-            }
         }
 
         private void ingresarEstado()
@@ -172,6 +176,7 @@ namespace automataFinitoDeterminista
             string estadoCreado = "q" + estadoSiguienteAgraficar.ToString();
             estadosGraficos.Add(estadoCreado, false);
             posicionesGraficas.Add(posicionActual, estadoCreado);
+
             estadoSiguienteAgraficar++;
             Graphics g;
             Bitmap imagen = (Bitmap)tablero.Image.Clone();
@@ -208,25 +213,69 @@ namespace automataFinitoDeterminista
 
         private Point posicionInicialLinea = new Point();
         private bool hacerLinea = false;
+        private bool ponerEtiqueta = false;
+        private List<char> letrasEtiqueta = new List<char>();
         private void tablero_MouseDown(object sender, MouseEventArgs e)
         {
-            if (posicionesGraficas.ContainsKey(posicionActual) && e.Button == MouseButtons.Right)
+            if (ponerEtiqueta)
             {
-                posicionInicialLinea = posicionActual;
-                hacerLinea = true;
+                Graphics g;
+                Bitmap imagen = (Bitmap)tablero.Image.Clone();
+                g = Graphics.FromImage(imagen);
+                string letras = string.Join(",", letrasEtiqueta.ToArray());
+                g.DrawString(letras, new Font("Verdana", 10), Brushes.Black, e.X, e.Y);
+                tablero.Image = imagen;
+                g.Dispose();
+            }
+            else
+            {
+                if (posicionesGraficas.ContainsKey(posicionActual) && e.Button == MouseButtons.Right)
+                {
+                    posicionInicialLinea = posicionActual;
+                    hacerLinea = true;
+                }
             }
         }
 
         private void tablero_MouseUp(object sender, MouseEventArgs e)
         {
+            if (ponerEtiqueta)
+            {
+                ponerEtiqueta = false;
+            }
             if (hacerLinea && e.Button == MouseButtons.Right)
             {
                 ingresarAlfabeto ingreso = new ingresarAlfabeto(Alfabeto);
-                if (ingreso.ShowDialog() == DialogResult.OK)
+                ingreso.ShowDialog();
+                if (ingreso.DialogResult == DialogResult.OK)
                 {
-
+                    Alfabeto = ingreso.alfabeto;
+                    ponerEtiqueta = true;
+                    int posicion = 0;
+                    letrasEtiqueta = ingreso.agregar.ToList();
+                    foreach (char letra in ingreso.agregar)
+                    {
+                        try
+                        {
+                            PreEstadoGrafico preEstado = new PreEstadoGrafico();
+                            preEstado.estadoInicio = posicionesGraficas[posicionInicialLinea];
+                            preEstado.letra = letra;
+                            TransicionGrafica.Add(preEstado, posicionesGraficas[posicionActual]);
+                        }
+                        catch (Exception)
+                        {
+                            letrasEtiqueta.RemoveAt(posicion);
+                        }
+                        posicion++;
+                    }
+                    AlfabetoToolStripTextBox.Clear();
+                    foreach (char letra in Alfabeto)
+                    {
+                        AlfabetoToolStripTextBox.Text += letra;
+                    }
                     dibujarLinea();
                 }
+                hacerLinea = false;
             }
         }
 
@@ -267,5 +316,100 @@ namespace automataFinitoDeterminista
             tablero.Image = imagen;
             g.Dispose();
         }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            char[] cadenas = toolStripTextBox2.Text.ToCharArray();
+            string estadoActual = "q0";
+            foreach (char letra in cadenas)
+            {
+                PreEstadoGrafico preTransicion = new PreEstadoGrafico();
+                preTransicion.estadoInicio = estadoActual;
+                preTransicion.letra = letra;
+                try
+                {
+                    estadoActual = TransicionGrafica[preTransicion];
+                }
+                catch (KeyNotFoundException)
+                {
+
+                    continue;
+                }
+            }
+            if (estadosGraficos[estadoActual])
+            {
+                toolStripLabel3.BackColor = Color.Green;
+                toolStripLabel3.Text = "APROBADA";
+            }
+            else
+            {
+                toolStripLabel3.BackColor = Color.Red;
+                toolStripLabel3.Text = "REPROBADA";
+            }
+        }
+
+        private void AlfabetoToolStripTextBox_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AlfabetoToolStripTextBox_TextChanged(object sender, EventArgs e)
+        {
+            char[] letras = AlfabetoToolStripTextBox.Text.ToCharArray();
+            Graphics g;
+            Bitmap imagen = (Bitmap)tablero.Image.Clone();
+            g = Graphics.FromImage(imagen);
+            Pen pen = new Pen(Color.Black, 2);
+            pen.StartCap = LineCap.RoundAnchor;
+            pen.EndCap = LineCap.ArrowAnchor;
+            Point[] points = new Point[4];
+            foreach (var estado in estadosGraficos.ToArray())
+            {
+
+                TransicionGrafica.Where(x => x.Key.estadoInicio == estado.Key);
+                List<char> letrasEtiquetaParcial = new List<char>();
+                foreach (char letra in letras)
+                {
+                    PreEstadoGrafico temp = new PreEstadoGrafico();
+                    temp.estadoInicio = estado.Key;
+                    temp.letra = letra;
+                    try
+                    {
+                        if (TransicionGrafica[temp] == estado.Key)
+                        {
+                            letrasEtiquetaParcial.Add(temp.letra);
+                        }
+                    }
+                    catch (KeyNotFoundException)
+                    {
+                        letrasEtiquetaParcial.Add(temp.letra);
+                    }
+
+                }
+                if (letrasEtiquetaParcial.Count>0)
+                {
+                    points[0] = new Point(posicionesGraficas.FirstOrDefault(x => x.Value == estado.Key).Key.X * 100,
+                                                   posicionesGraficas.FirstOrDefault(x => x.Value == estado.Key).Key.Y * 100 + 25);
+                    points[3] = new Point(points[0].X + 50, points[0].Y);
+                    points[1] = new Point(points[0].X, points[0].Y + 50);
+                    points[2] = new Point(points[0].X + 50, points[0].Y + 50);
+                    g.DrawLines(pen, points);
+                    g.DrawString(String.Join(",", letrasEtiquetaParcial.ToArray()),new Font("Verdana",12),Brushes.Black,points[0].X+5,points[0].Y+25);
+                }
+
+            }
+            tablero.Image = imagen;
+            g.Dispose();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            tablero.Image = new Bitmap(tablero.Width, tablero.Height);
+            estadosGraficos = new Dictionary<string, bool>();
+            posicionesGraficas = new Dictionary<Point, string>();
+            Alfabeto = new List<char>();
+            TransicionGrafica = new Dictionary<PreEstadoGrafico, string>();
+            estadoSiguienteAgraficar = 0;
+    }
     }
 }

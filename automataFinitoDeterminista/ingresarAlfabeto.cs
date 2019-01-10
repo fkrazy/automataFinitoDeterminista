@@ -12,7 +12,8 @@ namespace automataFinitoDeterminista
 {
     public partial class ingresarAlfabeto : Form
     {
-        public static List<char> alfabeto;
+        public List<char> alfabeto = new List<char>();
+        public char[] agregar;
         public ingresarAlfabeto(List<char> letras)
         {
             InitializeComponent();
@@ -27,24 +28,25 @@ namespace automataFinitoDeterminista
 
         private void button1_Click(object sender, EventArgs e)
         {
-            char[] letrasDelCamino = textBox1.Text.ToCharArray();
-            if (alfabeto.Count < 0)
-                alfabeto.AddRange(letrasDelCamino);
+            agregar = textBox1.Text.ToCharArray();
+            if (alfabeto.Count == 0)
+                alfabeto.AddRange(agregar);
             else
-                foreach (char letra in letrasDelCamino)
+                foreach (char letra in agregar)
                 {
                     bool existe = false;
-                    foreach (char letraAlfabeto in alfabeto)
+                    foreach (char letraAlfabeto in alfabeto.ToArray())
                     {
                         if (letra == letraAlfabeto)
                         {
                             existe = true;
                             break;
-                        }
-                        if (!existe)
-                            alfabeto.Add(letra);
+                        }                        
                     }
+                    if (!existe)
+                        alfabeto.Add(letra);
                 }
+            MessageBox.Show("de click donde desee poner la etiqueta de las letras");
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

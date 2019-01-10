@@ -48,12 +48,15 @@
             this.tableControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.tablero = new System.Windows.Forms.PictureBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
+            this.AlfabetoToolStripTextBox = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBox2 = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
+            this.button2 = new System.Windows.Forms.Button();
             this.tableControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -254,6 +257,8 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button2);
+            this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Controls.Add(this.tablero);
             this.tabPage2.Controls.Add(this.toolStrip1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -263,6 +268,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Grafico";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(490, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(70, 19);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "Verificar";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // tablero
             // 
@@ -282,9 +297,10 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
-            this.toolStripTextBox1,
+            this.AlfabetoToolStripTextBox,
             this.toolStripLabel2,
-            this.toolStripTextBox2});
+            this.toolStripTextBox2,
+            this.toolStripLabel3});
             this.toolStrip1.Location = new System.Drawing.Point(3, 3);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1218, 25);
@@ -297,10 +313,12 @@
             this.toolStripLabel1.Size = new System.Drawing.Size(52, 22);
             this.toolStripLabel1.Text = "Alfabeto";
             // 
-            // toolStripTextBox1
+            // AlfabetoToolStripTextBox
             // 
-            this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 25);
+            this.AlfabetoToolStripTextBox.Name = "AlfabetoToolStripTextBox";
+            this.AlfabetoToolStripTextBox.Size = new System.Drawing.Size(100, 25);
+            this.AlfabetoToolStripTextBox.Click += new System.EventHandler(this.AlfabetoToolStripTextBox_Click);
+            this.AlfabetoToolStripTextBox.TextChanged += new System.EventHandler(this.AlfabetoToolStripTextBox_TextChanged);
             // 
             // toolStripLabel2
             // 
@@ -312,6 +330,21 @@
             // 
             this.toolStripTextBox2.Name = "toolStripTextBox2";
             this.toolStripTextBox2.Size = new System.Drawing.Size(100, 25);
+            // 
+            // toolStripLabel3
+            // 
+            this.toolStripLabel3.Name = "toolStripLabel3";
+            this.toolStripLabel3.Size = new System.Drawing.Size(0, 22);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(1141, 5);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 20);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "borrar";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
@@ -359,9 +392,12 @@
         private System.Windows.Forms.PictureBox tablero;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-        private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
+        private System.Windows.Forms.ToolStripTextBox AlfabetoToolStripTextBox;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel3;
+        private System.Windows.Forms.Button button2;
     }
 }
 
